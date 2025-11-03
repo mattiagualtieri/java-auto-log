@@ -28,7 +28,10 @@ public class AutoLogAspect {
     logger.info("Called {}({})", methodName, args);
     try {
       Object result = joinPoint.proceed();
-      logger.info("Call to {} returned {}", methodName, result);
+      MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+      if (!void.class.equals(signature.getReturnType())) {
+        logger.info("Call to {} returned {}", methodName, result);
+      }
       return result;
     } catch (Throwable t) {
       logger.error(t.getMessage(), t);
